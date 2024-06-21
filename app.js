@@ -1,36 +1,86 @@
-let valorMaximo = parseInt(prompt('Ingrese el valor máximo:'));
-let numeroSecreto = Math.floor(Math.random()*valorMaximo) + 1;
-let numeroUsuario;
-let intentos = 1;
-let maximoIntentos = 3;
+let numeroSecreto = 0;
+let intentos = 0;
+let listaNumeros = [];
+let numeroMaximo = 0;
+let numeroIntentos = 3;
 
-while(numeroUsuario != numeroSecreto && valorMaximo != NaN)
+function verificarIntento()
 {
-    numeroUsuario = parseInt(prompt(`Me indicas un numero por favor entre 1 y ${valorMaximo}:`));
+    let numeroUsuario = parseInt(document.getElementById('valorUsuario').value);
 
-    //Este código realiza la comparacion.
-    if (numeroUsuario == numeroSecreto) 
+    if(numeroUsuario === numeroSecreto)
     {
-        //Acertamos, fue verdadera la condición.
-        alert(`Acertaste, el número es ${numeroUsuario}. Intentos: ${intentos} ${(intentos == 1) ? "vez" : "veces"}.`);
+        asignarTextoElemento('p',`Acertaste el número en ${intentos} ${(intentos == 1) ? 'intento' : 'intentos'}`);
+        document.getElementById('reiniciar').removeAttribute('disabled');
     }
     else
     {
-        if(numeroUsuario < numeroSecreto)
+        if(numeroSecreto > numeroUsuario)
         {
-            alert('el numero secreto es mayor.');
+            asignarTextoElemento('p','El número es mayor');
         }
         else
         {
-            alert('el numero secreto es menor.');
+            asignarTextoElemento('p','El número es menor');
         }
-        //Incrementamos el contador cuando no acierta.
-        intentos ++;
 
-        if(intentos > maximoIntentos)
+        intentos++;
+        limpiarCampo();
+    }
+
+    return;
+}
+
+function condicionesIniciales()
+{
+    asignarTextoElemento('h1', 'Juego de número secreto');
+    asignarTextoElemento('p', `Ingresa un número del 1 al ${numeroMaximo}`);
+    listaNumeros = [];
+    numeroSecreto = generarNumeroSecreto();
+    intentos = 1;
+}
+
+function reiniciarJuego()
+{
+    limpiarCampo();
+    condicionesIniciales();
+    document.getElementById('reiniciar').setAttribute('disabled', true);
+}
+
+function limpiarCampo()
+{
+    document.querySelector('#valorUsuario').value = '';
+}
+
+function asignarTextoElemento(elemento, texto)
+{
+    let elementoHTML = document.querySelector(elemento);
+    elementoHTML.innerText = texto;
+
+
+    return;
+}
+
+function generarNumeroSecreto()
+{
+    let numeroGenerado = parseInt(Math.floor(Math.random()*10)) + 1;
+
+    if(listaNumeros.length == numeroIntentos)
+    {
+        asignarTextoElemento('p', 'Ya no hay más intentos disponibles');
+    }
+    else
+    {
+        if(listaNumeros.includes(numeroGenerado))
         {
-            alert(`Máximo de intentos alcanzado (${maximoIntentos}). El número era ${numeroSecreto}`);
-            break;
+            return generarNumeroSecreto();
+        }
+        else
+        {
+            listaNumeros.push(numeroGenerado);
+            return numeroGenerado;
         }
     }
 }
+
+condicionesIniciales();
