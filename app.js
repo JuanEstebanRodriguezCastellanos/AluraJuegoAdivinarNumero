@@ -1,7 +1,7 @@
 let numeroSecreto = 0;
 let intentos = 0;
 let listaNumeros = [];
-let numeroMaximo = 0;
+let numeroMaximo = 10;
 let numeroIntentos = 3;
 
 function verificarIntento()
@@ -63,7 +63,7 @@ function asignarTextoElemento(elemento, texto)
 
 function generarNumeroSecreto()
 {
-    let numeroGenerado = parseInt(Math.floor(Math.random()*10)) + 1;
+    let numeroGenerado = parseInt(Math.floor(Math.random()*numeroMaximo)) + 1;
 
     if(listaNumeros.length == numeroIntentos)
     {
